@@ -111,6 +111,19 @@ L = \begin{pmatrix}
 $$
 \newpage
 \subsection{Solution for 1b}
+LU decomposition is a technique for factorizing a square matrix A as a product of two other matrices. 
+$$
+A = LU
+$$
+where L is a lower triangular matrix and U is upper triangular matrix. \\
+To have LU decomposition the matrix A must be square matrix ($m \times m$ dimensions) and invertible ($A^{-1}$ exists).  \\
+The algorithm used to solve this particular matrix is LU without pivoting. 
+In this algorithm we initialize L to be identity matrix and we modify A to be an upper triangular matrix like U by performing row operations to create zeroes below the diagonal for each column. Then each multiplier/coefficient is recorded in L for the coresponding row and column. \\
+The most common use for LU decomposition is to solve system of linear equations. 
+$$
+Ax = b 
+$$
+For the system we can substitute $A = LU$ and we can let $y = Ux$. Then the system becomes $Ly = b$ and after solving it we can solve the other system $Ux = y$
 
 \newpage
 
@@ -124,12 +137,146 @@ A = \begin{bmatrix}
 \end{bmatrix}
 $$
 \subsection{Solution for 2a}
+First we perform the Grand-Schmidt process for each column of the matrix
+$$
+v_1 = \begin{bmatrix} 5 \\ 2 \\ 3 \\ 7   \end{bmatrix} \quad
+v_2 = \begin{bmatrix} 1 \\ -3 \\2 \\ 4  \end{bmatrix} \quad
+v_3 = \begin{bmatrix} -1\\ 4 \\ 1 \\ 2   \end{bmatrix}
+$$
+We determine the orthogonal vectors $e_k$ by the following formula
+$$
+e_k = \frac{u_k}{|| u_k ||} \text{ where } \quad u_k = v_k - \sum_{j=1} ^{k} proj_{u_j} v_k \quad ||u_k||  =  \sqrt{\sum_{j=1} ^n  |u_i|^2} \quad proj_a(b) = \frac{a \cdot b}{a \cdot a}a
+$$
+We solve for each column
+\begin{gather*}
+u_1 = v_1 = \begin{bmatrix} 5 \\ 2 \\ 3 \\ 7   \end{bmatrix} \implies
+e_1 = \frac{u_1}{|| u_1 ||} =
+\frac{u_1}{\sqrt{5^2 + 2^2 + 3^2 + 7^2}} =
+ \frac{u_1}{\sqrt{87}} = \begin{bmatrix} \frac{5\sqrt{87}}{87} \\ \frac{2\sqrt{87}}{87} \\ \frac{3\sqrt{87}}{87} \\ \frac{7\sqrt{87}}{87}   \end{bmatrix} \approx 
+\begin{bmatrix} 0.54 \\ 0.21 \\ 0.32 \\ 0.75   \end{bmatrix} \\
+ \\
+u_2 = v_2 - proj_{u_1} (v_2) = v_2 - \frac{u_1 \cdot v_2}{ u_1 \cdot u_1}u_1 = v_2 - \frac{(1 \cdot 5) + (-3) \cdot 2 + (2 \cdot 3) + (4 \cdot 7)}{\sqrt{87}^2} u_1 = \\
+u_2 = v_2 - \frac{33}{87} u_1 = v_2 - \frac{11}{29} u_1 = \begin{bmatrix} 1 \\ -3 \\2 \\ 4  \end{bmatrix} - \frac{11}{29} \begin{bmatrix} 5 \\ 2 \\ 3 \\ 7   \end{bmatrix} = \begin{bmatrix} 1 - \frac{55}{29} \\ -3 - \frac{22}{29} \\2 - \frac{33}{29} \\ 4 - \frac{77}{29} \end{bmatrix} =
+\begin{bmatrix} -\frac{26}{29} \\ -\frac{109}{29} \\\frac{25}{29} \\ \frac{39}{29}  \end{bmatrix} \approx \begin{bmatrix} -0.90 \\ -3.76 \\ 0.86 \\ 0.75  \end{bmatrix} \\
+e_2 = \frac{u_2}{|| u_2 ||} = \frac{u_2}{\sqrt{-0.9^2 + -3.76^2 + 0.86^2 + 1.34^2}} =
+ \frac{u_2}{\sqrt{17.48}} \approx \begin{bmatrix} -0.21\\ -0.90 \\ 0.21 \\ 0.32   \end{bmatrix} \\
+\end{gather*}
+\begin{gather*}
+u_3 = v_3 - proj_{u_1} (v_3) - proj_{u_2} (v_3) = v_3 -  \frac{u_1 \cdot v_3}{ u_1 \cdot u_1}u_1 -  \frac{u_2 \cdot v_3}{ u_2 \cdot u_2}u_2 \\
+\frac{u_1 \cdot v_3}{ u_1 \cdot u_1}u_1 = \frac{-5 + (4\cdot2) + (1\cdot 3) +( 2 \cdot 7)}{\sqrt{87}^2} u_1 = \frac{20}{87}  \begin{bmatrix} 5 \\ 2 \\ 3 \\ 7   \end{bmatrix} =  
+ \begin{bmatrix} 1.14 \\ 0.46 \\ 0.69 \\ 1.61  \end{bmatrix} \\
+\frac{u_2 \cdot v_3}{ u_2 \cdot u_2}u_2 = \frac{0.9 + (-3.76 \cdot 4) + 0.86 + (0.75 \cdot 2)}{17.48}u_2 = \frac{-11.78}{17.48}u_2 = 
+\begin{bmatrix} 0.65 \\ 2.72 \\ -0.62 \\ -0.54   \end{bmatrix}\\
+u_3 = \begin{bmatrix} -1\\ 4 \\ 1 \\ 2 \end{bmatrix} - \begin{bmatrix} 1.14 \\ 0.46 \\ 0.69 \\ 1.61  \end{bmatrix}  - \begin{bmatrix} 0.65 \\ 2.72 \\ -0.62 \\ -0.54   \end{bmatrix} = 
+\begin{bmatrix}- 2.69 \\ 1.26 \\ 0.83 \\1.21   \end{bmatrix} \\
+e_3 = \frac{u_3}{|| u_3 ||} = \frac{u_3}{\sqrt{-2.69^2 + 1.26^2 + 0.83^2 + 1.21^2}}= \frac{u_3}{\sqrt{10.99}} = \begin{bmatrix} - 0.81 \\ 0.38 \\ 0.25 \\ 0.36  \end{bmatrix}
+\end{gather*}
+After we create the orthogonal basis we can create the Q matrix.
+$$
+Q = 
+\begin{pmatrix} 
+0.54 & -0.21 & -0.81 \\
+0.21 & -0.90 & 0.38 \\
+0.32 & 0.21 & 0.25 \\
+0.75 & 0.32 & 0.36
+\end{pmatrix}
+$$
+We can find R by the following formula 
+$$
+R = Q^T A
+$$
+$$
+Q^T = 
+\begin{pmatrix} 
+0.54 & 0.21 & 0.32 & 0.75 \\
+-0.21 & -0.9 & 0.21 & 0.32 \\
+-0.81 & 0.38 & 0.25 & 0.36 \\
+\end{pmatrix}
+$$
+$$
+Q^TA =
+ \begin{pmatrix} 
+0.54 & 0.21 & 0.32 & 0.75 \\
+-0.21 & -0.9 & 0.21 & 0.32 \\
+-0.81 & 0.38 & 0.25 & 0.36 \\
+\end{pmatrix} 
+\begin{bmatrix}
+	5 & 1 & -1 \\
+	2 & -3 & 4 \\
+	3 & 2 & 1 \\
+	7 & 4 & 2 \\
+\end{bmatrix} = 
+\begin{pmatrix}
+9.33 & 3.54 & 2.14 \\
+0 & 4.18 & -2.53 \\
+0 & 0 & 3.31
+\end{pmatrix} = R
+$$
+
+
 \subsection{Solution for 2b}
 \newpage
 
 \section{Problem 3}
+$$
+A = 
+\begin{pmatrix}
+2 & -1 & 1 \\
+-1 & 5 & -1 \\
+1 & -1 & 2 
+\end{pmatrix}
+$$
 \subsection{Solution for 3a}
+To prove  that A is positive defined we need to check if the leading principal minors of the matrix are all positive numbers. The leading principal minors correspond to the determinants of the top-left submatrices 
+$$
+A_{1 \times 1} = \begin{pmatrix} 2  \end{pmatrix} \qquad 
+A_{2 \times 2} = \begin{pmatrix} 2 & -1 \\ -1 & 5 \end{pmatrix} \qquad 
+A_{3 \times 3} = \begin{pmatrix}
+2 & -1 & 1 \\
+-1 & 5 & -1 \\
+1 & -1 & 2 
+\end{pmatrix}
+$$
+\begin{gather*}
+\det A_{1 \times 1} = 2 > 0 \\ 
+\det A_{2 \times 2} = (2 \cdot 5) - (-1 \cdot (-1)) = 10 -1 = 9 > 0 \\
+\det A_{3 \times 3} = (2 \cdot 5 \cdot 2) + ( (-1) \cdot (-1) \cdot 1) + (1 \cdot (-1) \cdot (-1))\\
+ - (1 \cdot 5 \cdot 1) - ((-1) \cdot (-1) \cdot 2) - (2 \cdot (-1) \cdot (-1) ) = 20 +1 +1 - 5 -2 -2 = 13 > 0
+\end{gather*}
 \subsection{Solution for 3b}
+The Cholesky decomposition is decomposing the matrix in the form 
+$$
+A = L \cdot L^T
+$$
+where L is lower triangular matrix, where each element is calculated by the following formulas
+\begin{gather*}
+l_{11} = \sqrt{a_{11}}   \\
+l_{j1} = \frac{a_{j1}}{l_{11}} \quad  j \in [2, n] \\
+l_{ii} = \sqrt{a_{ii} - \sum_{k=1} ^{i-1} l_{ik}} \quad i \in [2, n] \\
+l_{ji} = \frac{ \left( a_{ij} - \sum_{k=1} ^{i-1} l_{ik} l_{jk} \right)}{l_{ii}} \quad i \in [2, n-1], j \in [i+1, n]
+\end{gather*}
+\newpage
+\begin{gather*}
+l_{11} = \sqrt{2} = 1.41 \\
+l_{21} = \frac{-1}{1.41} = - 0.70 \\
+l_{31} = \frac{1}{1.41}  = 0.70 \\
+l_{22} = \sqrt{a_{22} - l_{21} ^2} = \sqrt{5 - (-0.70)^2} = \sqrt{4.5} = 2.12 \\
+l_{32} = \frac{a_{32} - l_{32}l_{31}}{l_{22}} = \frac{-1 -(0.7)(-0.7)}{2.12} = -0.24 \\
+l_{33} = \sqrt{a_{33} - (l_{31} ^2 + l_{32} ^2)} = \sqrt{2 - (0.7^2 + (-0.24^2))} = 1.20\\
+\\
+L = 
+\begin{pmatrix}
+1.41 & 0 & 0 \\
+-0.70 & 2.12 & 0 \\
+0.70 & -0.24 & 1.20 
+\end{pmatrix} \implies  
+L^T = \begin{pmatrix}
+1.41 & -0.70 & 0.70 \\
+0 & 2.12 & -0.23 \\
+0 & 0 & 1.20
+\end{pmatrix}
+\end{gather*}
+To find the $LDL^T$ decomposition we need to find D which is the 
 \newpage
 
 \section{Problem 4}
