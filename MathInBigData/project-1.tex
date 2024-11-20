@@ -280,7 +280,70 @@ To find the $LDL^T$ decomposition we need to find D which is the
 \newpage
 
 \section{Problem 4}
+$$
+A = \begin{bmatrix}
+3 & 2 \\
+2 & 3 \\
+2 & -2 \\
+\end{bmatrix}
+$$
 \subsection{Solution for 4a}
+To find the Singular Value Decomposition or SVD we need to construct the matrises $S, U, V$. To do that we need to create $A^T$.
+$$
+A^T = \begin{bmatrix}
+3 & 2 & 2 \\
+2 & 3 & -2
+\end{bmatrix}
+$$
+We calculate $AA^T$
+$$
+AA^T = 
+\begin{bmatrix}
+3 & 2 \\
+2 & 3 \\
+2 & -2 \\
+\end{bmatrix} \cdot
+\begin{bmatrix}
+3 & 2 & 2 \\
+2 & 3 & -2
+\end{bmatrix} = 
+\begin{bmatrix}
+13 & 12 & 2 \\
+12 & 13 & -2 \\
+2 & -2 & 8
+\end{bmatrix}
+$$
+Next we need to find the eigenvalues and eigenvectors. To do that we need $\det (AA^T - \lambda I) = 0$
+\begin{gather*}
+\det (AA^T - \lambda I) = 0 \implies 
+\begin{vmatrix}
+13-\lambda & 12 & 2 \\
+12 & 13-\lambda & -2 \\
+2 & -2 & 8-\lambda \\
+\end{vmatrix} = 0 \implies -\lambda (\lambda - 25)(\lambda-9) = 0 \\
+\lambda_1 = 25 \quad \lambda_2 = 9 \quad \lambda_3 = 0 
+\end{gather*}
+To find the eigenvectors we need to calculate for each eigenvalue the following expression
+$$
+(AA^T - \lambda I ) X = 0
+$$
+\begin{gather*}
+\lambda_1 = 25 \implies \text{eigenvector} \begin{bmatrix}1 \\ 1 \\ 0  \end{bmatrix}\\
+\lambda_2 = 9 \implies \text{eigenvector} \begin{bmatrix}\frac{1}{4} \\ -\frac{1}{4} \\ 1  \end{bmatrix}\\
+\lambda_3 = 0 \implies \text{eigenvector} \begin{bmatrix}-2 \\ 2 \\ 2  \end{bmatrix}\\
+\end{gather*}
+To get the $S$ matrix we calculate the square root of the nonzero eigenvalues
+$$
+\sigma_1 = 5 \qquad \sigma_2 = 3 
+$$
+The $S$ matrix is a zero matrix with the eigenvalues on its diagonal
+$$
+S = \begin{bmatrix}
+5 & 0 \\
+0 & 3 \\
+0 & 0
+ \end{bmatrix}
+$$
 \subsection{Solution for 4b}
 
 
