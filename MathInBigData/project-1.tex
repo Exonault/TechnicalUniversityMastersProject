@@ -212,8 +212,17 @@ Q^TA =
 0 & 0 & 3.31
 \end{pmatrix} = R
 $$
+We can find $L$ by transposing $R$.
+$$
+L = R^T = 
+\begin{pmatrix}
+9.33 & 0 & 0 \\
+3.54 & 4.18 & 0 \\
+2.14 & -2.53 & 3.31 \\
+\end{pmatrix} 
+$$
 
-
+\newpage
 \subsection{Solution for 2b}
 \newpage
 
@@ -227,22 +236,49 @@ A =
 \end{pmatrix}
 $$
 \subsection{Solution for 3a}
-To prove  that A is positive defined we need to check if the leading principal minors of the matrix are all positive numbers. The leading principal minors correspond to the determinants of the top-left submatrices 
+To prove that A is positive defined by pivoting we will transform the matrix into an upper triangular matrix and check if every pivot is positive. The first pivot is $a_{11} = 2$. Then we perform the following operations on matrix A: 
 $$
-A_{1 \times 1} = \begin{pmatrix} 2  \end{pmatrix} \qquad 
-A_{2 \times 2} = \begin{pmatrix} 2 & -1 \\ -1 & 5 \end{pmatrix} \qquad 
-A_{3 \times 3} = \begin{pmatrix}
+\begin{array}{|l@{}}
+	R_2 = R_2 + \frac{R_1}{2} \\
+	R_3 = R_3 - \frac{R_1}{2}
+\end{array}
+$$
+$$
+A = \begin{pmatrix}
 2 & -1 & 1 \\
--1 & 5 & -1 \\
-1 & -1 & 2 
+0 & \frac{9}{2} & -\frac{1}{2} \\
+0 & -\frac{1}{2} & \frac{3}{2} \\
 \end{pmatrix}
 $$
-\begin{gather*}
-\det A_{1 \times 1} = 2 > 0 \\ 
-\det A_{2 \times 2} = (2 \cdot 5) - (-1 \cdot (-1)) = 10 -1 = 9 > 0 \\
-\det A_{3 \times 3} = (2 \cdot 5 \cdot 2) + ( (-1) \cdot (-1) \cdot 1) + (1 \cdot (-1) \cdot (-1))\\
- - (1 \cdot 5 \cdot 1) - ((-1) \cdot (-1) \cdot 2) - (2 \cdot (-1) \cdot (-1) ) = 20 +1 +1 - 5 -2 -2 = 13 > 0
-\end{gather*}
+The next pivot is $a_{22} = \frac{9}{2}$. We perform the following operation
+$$
+R_3 = R3 - \left(\frac{-\frac{1}{2}}{\frac{9}{2}}\right)R2 = R_3 + \frac{1}{9} R_2
+$$
+$$
+A = \begin{pmatrix}
+2 & -1 & 1 \\
+0 & \frac{9}{2} & -\frac{1}{2} \\
+0 & 0 & \frac{13}{9} \\
+\end{pmatrix}
+$$
+The pivots are $\left( 2, \frac{9}{2}, \frac{13}{9} \right)$ which are all positive numbers.
+
+%To prove  that A is positive defined we need to check if the leading principal minors of the matrix are all positive numbers. The leading principal minors correspond to the determinants of the top-left submatrices 
+%$$
+%A_{1 \times 1} = \begin{pmatrix} 2  \end{pmatrix} \qquad 
+%A_{2 \times 2} = \begin{pmatrix} 2 & -1 \\ -1 & 5 \end{pmatrix} \qquad 
+%A_{3 \times 3} = \begin{pmatrix}
+%2 & -1 & 1 \\
+%-1 & 5 & -1 \\
+%1 & -1 & 2 
+%\end{pmatrix}
+%$$
+%\begin{gather*}
+%\det A_{1 \times 1} = 2 > 0 \\ 
+%\det A_{2 \times 2} = (2 \cdot 5) - (-1 \cdot (-1)) = 10 -1 = 9 > 0 \\
+%\det A_{3 \times 3} = (2 \cdot 5 \cdot 2) + ( (-1) \cdot (-1) \cdot 1) + (1 \cdot (-1) \cdot (-1))\\
+% - (1 \cdot 5 \cdot 1) - ((-1) \cdot (-1) \cdot 2) - (2 \cdot (-1) \cdot (-1) ) = 20 +1 +1 - 5 -2 -2 = 13 > 0
+%\end{gather*}
 \subsection{Solution for 3b}
 The Cholesky decomposition is decomposing the matrix in the form 
 $$
@@ -253,10 +289,8 @@ where L is lower triangular matrix, where each element is calculated by the foll
 l_{11} = \sqrt{a_{11}}   \\
 l_{j1} = \frac{a_{j1}}{l_{11}} \quad  j \in [2, n] \\
 l_{ii} = \sqrt{a_{ii} - \sum_{k=1} ^{i-1} l_{ik}} \quad i \in [2, n] \\
-l_{ji} = \frac{ \left( a_{ij} - \sum_{k=1} ^{i-1} l_{ik} l_{jk} \right)}{l_{ii}} \quad i \in [2, n-1], j \in [i+1, n]
-\end{gather*}
-\newpage
-\begin{gather*}
+l_{ji} = \frac{ \left( a_{ij} - \sum_{k=1} ^{i-1} l_{ik} l_{jk} \right)}{l_{ii}} \quad i \in [2, n-1], j \in [i+1, n] \\
+\\
 l_{11} = \sqrt{2} = 1.41 \\
 l_{21} = \frac{-1}{1.41} = - 0.70 \\
 l_{31} = \frac{1}{1.41}  = 0.70 \\
