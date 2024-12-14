@@ -262,23 +262,7 @@ A = \begin{pmatrix}
 \end{pmatrix}
 $$
 The pivots are $\left( 2, \frac{9}{2}, \frac{13}{9} \right)$ which are all positive numbers.
-
-%To prove  that A is positive defined we need to check if the leading principal minors of the matrix are all positive numbers. The leading principal minors correspond to the determinants of the top-left submatrices 
-%$$
-%A_{1 \times 1} = \begin{pmatrix} 2  \end{pmatrix} \qquad 
-%A_{2 \times 2} = \begin{pmatrix} 2 & -1 \\ -1 & 5 \end{pmatrix} \qquad 
-%A_{3 \times 3} = \begin{pmatrix}
-%2 & -1 & 1 \\
-%-1 & 5 & -1 \\
-%1 & -1 & 2 
-%\end{pmatrix}
-%$$
-%\begin{gather*}
-%\det A_{1 \times 1} = 2 > 0 \\ 
-%\det A_{2 \times 2} = (2 \cdot 5) - (-1 \cdot (-1)) = 10 -1 = 9 > 0 \\
-%\det A_{3 \times 3} = (2 \cdot 5 \cdot 2) + ( (-1) \cdot (-1) \cdot 1) + (1 \cdot (-1) \cdot (-1))\\
-% - (1 \cdot 5 \cdot 1) - ((-1) \cdot (-1) \cdot 2) - (2 \cdot (-1) \cdot (-1) ) = 20 +1 +1 - 5 -2 -2 = 13 > 0
-%\end{gather*}
+\newpage
 \subsection{Solution for 3b}
 The Cholesky decomposition is decomposing the matrix in the form 
 $$
@@ -310,7 +294,51 @@ L^T = \begin{pmatrix}
 0 & 0 & 1.20
 \end{pmatrix}
 \end{gather*}
-To find the $LDL^T$ decomposition we need to find D which is the 
+\newpage
+To find the $LDL^T$ decomposition we need to find the two matrices: $L$ and $D$.
+L is a lower triangular matrix and D is a diagonal matrix.
+We can find each element with the following formulas
+$$
+d_{ii} = a_{ii} - \sum_{j=1} ^{i-1} l_{ij} ^2 \cdot d_{jj} \qquad
+l_{ii} = \frac{1}{d_{ii}} \left( a_{ij} - \sum_{k=1} ^{i-1} l_{ik}\cdot l_{jk}\cdot d_{kk} \right)  
+$$
+\begin{gather*}
+L = \begin{pmatrix}
+1 & 0 & 0 \\
+l_{21}& 1& 0 \\
+l_{31} & l_{32} & 1
+\end{pmatrix} \qquad 
+D = \begin{pmatrix}
+d_{11} & 0 & 0 \\
+0 & d_{22} & 0 \\
+0 & 0 & d_{33}
+\end{pmatrix} \\ \\
+d_{11} = a_{11} = 2 \\
+l_{21} = \frac{1}{d_{11}} \left( a_{21} - \sum_{k=1} ^0 l_{2k}l_{1k}d_{kk} \right) = \frac{1}{2} (-1) = -0.5 \\
+l_{31} = \frac{1}{d_{11}} \left( a_{31} - \sum_{k=1} ^0 l_{2k}l_{1k}d_{kk} \right) = \frac{1}{2} (1) = 0.5 \\
+\\
+d_{22} = a_{22} - \sum_{k=1} ^1 l_{2k} ^2 d_{kk} = 5 - (l_{21} ^2 \cdot d_{11} ) = 5 - (0.5^2 \cdot 2 ) = 5-0.5 = 4.5 \\ 
+l_{32} = \frac{1}{d_{22}} \left( a_{32} - \sum_{k=1} ^1 l_{3k}l_{2k}d_{kk} \right) = \frac{1}{4.5} \left(-1 - (l_{31}\cdot l_{21}\cdot d_{11} \right) = \\
+\frac{1}{4.5} (-1 -(0.5\cdot (-0.5) \cdot 2)) = \frac{1}{4.5} (-1 + 0.5) = \frac{1}{4.5} \cdot (-0.5) \approx -0.111 \\
+\\
+d_{33} = a_{33} - \sum_{k=1} ^2 l_{3k} ^2 d_{kk} = 2 - (l_{31} ^2 d_{11} + l_{32} ^2 d_{22}) = 2 - (2 \cdot 0.5^2 + 4.5 \cdot (-0.111)^2 ) \approx 1.444 \\
+\\
+L = \begin{pmatrix}
+1 & 0 & 0 \\
+-0.5& 1& 0 \\
+0.5 &-0.111 & 1
+\end{pmatrix} \quad 
+D = \begin{pmatrix}
+2 & 0 & 0 \\
+0 & 4.5 & 0 \\
+0 & 0 & 1.444
+\end{pmatrix} \quad 
+L^T = \begin{pmatrix}
+1 & -0.5 & 0.5 \\
+0 & 1& -0.111\\ 
+0 &0 & 1
+\end{pmatrix} 
+\end{gather*}
 \newpage
 
 \section{Problem 4}
@@ -322,62 +350,145 @@ A = \begin{bmatrix}
 \end{bmatrix}
 $$
 \subsection{Solution for 4a}
-To find the Singular Value Decomposition or SVD we need to construct the matrises $S, U, V$. To do that we need to create $A^T$.
+To find the Singular Value Decomposition or SVD we need to construct the matrises $U, S, V$. To do that we need to create $A^T$.
 $$
 A^T = \begin{bmatrix}
 3 & 2 & 2 \\
 2 & 3 & -2
 \end{bmatrix}
 $$
-We calculate $AA^T$
+We calculate $W = A^T A$
 $$
-AA^T = 
+W = 
+\begin{bmatrix}
+3 & 2 & 2 \\
+2 & 3 & -2
+\end{bmatrix} \cdot
 \begin{bmatrix}
 3 & 2 \\
 2 & 3 \\
 2 & -2 \\
-\end{bmatrix} \cdot
+\end{bmatrix} 
+ = 
 \begin{bmatrix}
-3 & 2 & 2 \\
-2 & 3 & -2
-\end{bmatrix} = 
-\begin{bmatrix}
-13 & 12 & 2 \\
-12 & 13 & -2 \\
-2 & -2 & 8
+17 & 8 \\
+8 & 17
 \end{bmatrix}
 $$
-Next we need to find the eigenvalues and eigenvectors. To do that we need $\det (AA^T - \lambda I) = 0$
+Next we need to find the eigenvalues and eigenvectors. To find the eigenvalues we need to calculate 
+$$\det (W -\lambda I) = 0$$
 \begin{gather*}
-\det (AA^T - \lambda I) = 0 \implies 
+\det (W - \lambda I) = 0 \implies 
 \begin{vmatrix}
-13-\lambda & 12 & 2 \\
-12 & 13-\lambda & -2 \\
-2 & -2 & 8-\lambda \\
-\end{vmatrix} = 0 \implies -\lambda (\lambda - 25)(\lambda-9) = 0 \\
-\lambda_1 = 25 \quad \lambda_2 = 9 \quad \lambda_3 = 0 
+17-\lambda & 8 \\
+8 & 17-\lambda 
+\end{vmatrix} = 0 \\
+(17-\lambda)^2 - 8^2 = 0 \\
+(17-\lambda + 8)(17-\lambda -8) = 0 \\
+(25 - \lambda) (9-\lambda)= 0 \\
+\lambda_1 = 25 \qquad \lambda_2 = 9 
 \end{gather*}
 To find the eigenvectors we need to calculate for each eigenvalue the following expression
 $$
-(AA^T - \lambda I ) X = 0
+(W - \lambda I ) X = 0
 $$
+where $X = (x_1, x_2)^T$
 \begin{gather*}
-\lambda_1 = 25 \implies \text{eigenvector} \begin{bmatrix}1 \\ 1 \\ 0  \end{bmatrix}\\
-\lambda_2 = 9 \implies \text{eigenvector} \begin{bmatrix}\frac{1}{4} \\ -\frac{1}{4} \\ 1  \end{bmatrix}\\
-\lambda_3 = 0 \implies \text{eigenvector} \begin{bmatrix}-2 \\ 2 \\ 2  \end{bmatrix}\\
+\lambda_1 = 25 \implies 
+\begin{pmatrix}
+17-25 & 8 \\
+8 & 17-25
+\end{pmatrix} \cdot  
+\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = 
+\begin{pmatrix}
+-8 & 8 \\
+8 & -8
+\end{pmatrix}\cdot  
+\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = 0 \\
+-8x_1 + 8x_2 = 0 \implies x_1 = x_2 \implies v =  \begin{bmatrix} 1 \\1 \end{bmatrix}  \\
+|| v || = \sqrt{1^2 + 1^2} = \sqrt{2} \implies v_1 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\1 \end{bmatrix} 
 \end{gather*}
-To get the $S$ matrix we calculate the square root of the nonzero eigenvalues
+\begin{gather*}
+\lambda_2 = 9 \implies 
+\begin{pmatrix}
+17-9 & 8 \\
+8 & 17-9
+\end{pmatrix} \cdot  
+\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = 
+\begin{pmatrix}
+8 & 8 \\
+8 & 8
+\end{pmatrix}\cdot  
+\begin{pmatrix} x_1 \\ x_2 \end{pmatrix} = 0 \\
+8x_1 + 8x_2 = 0 \implies x_1 = -x_2 \implies v =  \begin{bmatrix} 1 \\-1 \end{bmatrix} \\
+|| v || = \sqrt{1^2 + (-1)^2} = \sqrt{2}  \implies v_2 = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\-1 \end{bmatrix} 
+\end{gather*}
+Using $v_1, v_2$ we can create the matrix $V$
 $$
-\sigma_1 = 5 \qquad \sigma_2 = 3 
+V = 
+\begin{bmatrix} 
+\frac{1}{\sqrt{2}} & \frac{1}{\sqrt{2}} \\
+\frac{1}{\sqrt{2}} & -\frac{1}{\sqrt{2}}
+\end{bmatrix}
 $$
-The $S$ matrix is a zero matrix with the eigenvalues on its diagonal
+To get the $S$ matrix we need to calculate the singular values, which are the square root of each nonzero eigenvalue
 $$
-S = \begin{bmatrix}
+\sigma_1 = 5 \qquad \sigma_2 = 3 \implies
+S = 
+\begin{bmatrix}
 5 & 0 \\
 0 & 3 \\
 0 & 0
- \end{bmatrix}
+\end{bmatrix}
 $$
+To construct $U$ we need to calculate $u_1 = \frac{Av_1}{\sigma_1}$ and $u_2 = \frac{Av_2}{\sigma_2}$
+\begin{gather*}
+Av_1 =
+\begin{bmatrix}
+3 & 2 \\
+2 & 3 \\
+2 & -2 \\
+\end{bmatrix} \cdot 
+\frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\1 \end{bmatrix}  = \frac{1}{\sqrt{2}} \begin{bmatrix} 5 \\ 5 \\0 \end{bmatrix} =  \begin{bmatrix} \frac{5}{\sqrt{2}} \\ \frac{5}{\sqrt{2}} \\0 \end{bmatrix} \\
+ u_1 = \frac{Av_1}{\sigma_1} = \frac{1}{5} \begin{bmatrix} \frac{5}{\sqrt{2}} \\ \frac{5}{\sqrt{2}} \\0 \end{bmatrix} = 
+\begin{bmatrix} \frac{\sqrt{2}}{2}  \\ \frac{\sqrt{2}}{2}  \\0 \end{bmatrix} \\
+\\
+Av_2  = \begin{bmatrix}
+3 & 2 \\
+2 & 3 \\
+2 & -2 \\
+\end{bmatrix} \cdot 
+\frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\-1 \end{bmatrix} = \frac{1}{\sqrt{2}} \begin{bmatrix} 1 \\ -1 \\ 4 \end{bmatrix} = 
+\begin{bmatrix} \frac{1}{\sqrt{2}} \\ -\frac{1}{\sqrt{2}}\\ \frac{4}{\sqrt{2}} \end{bmatrix} \\
+u_2 = \frac{Av_2}{\sigma_2} = \frac{1}{3} \begin{bmatrix} \frac{1}{\sqrt{2}} \\ -\frac{1}{\sqrt{2}}\\ \frac{4}{\sqrt{2}} \end{bmatrix} = 
+\begin{bmatrix} \frac{\sqrt{2}}{6} \\ -\frac{\sqrt{2}}{6}\\ \frac{2\sqrt{2}}{3} \end{bmatrix}
+\end{gather*}
+To calculate $u_3$ we need to find a vector which makes an orthonormal basis for $\mathbb{R}^3$ with $u_1, u_2$ and is a unit vector. To do that we need to solve the following system
+\begin{gather*}
+\begin{array}{|l@{}}
+	\frac{\sqrt{2}}{2}x + \frac{\sqrt{2}}{2}y + 0z = 0 \qquad \qquad | \cdot \frac{2}{\sqrt{2}}  \\
+	\frac{\sqrt{2}}{6}x - \frac{\sqrt{2}}{6}y + \frac{2\sqrt{2}}{3}z = 0  \qquad \qquad | \cdot \frac{6}{\sqrt{2}} 
+\end{array} \\
+\begin{array}{|l@{}}
+	x + y + 0z = 0  \qquad \qquad  | R_2 = R_2 + -(R_1)  \\ 
+	x - y +4z = 0 
+\end{array} \\
+-2y + 4z = 0 \implies  y = 2z \\
+x = -y = -2z \\
+u_3 = \begin{bmatrix} -2z \\ 2z \\z \end{bmatrix} = \begin{bmatrix} -2 \\ 2 \\1 \end{bmatrix} \\
+\text{We need to find the unit vector} \\
+||u_3|| = \sqrt{(-2)^2 + 2^2 + 1^2} = \sqrt{9} = 3 \implies u_3 = \begin{bmatrix} - \frac{2}{3} \\ \frac{2}{3} \\ \frac{1}{3} \end{bmatrix} 
+\end{gather*}
+We can build U using $u_1, u_2, u_3$
+$$
+U = \begin{pmatrix} 
+\frac{\sqrt{2}}{2} & \frac{\sqrt{2}}{6} &  -\frac{2}{3}\\
+\frac{\sqrt{2}}{2}& -\frac{\sqrt{2}}{2} &  \frac{2}{3}\\
+0 & \frac{2\sqrt{2}}{3} & \frac{1}{3}
+\end{pmatrix}
+$$
+
+\newpage
 \subsection{Solution for 4b}
 
 
