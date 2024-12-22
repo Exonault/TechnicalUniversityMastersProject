@@ -72,7 +72,7 @@ public abstract class BinarySearchTree {
     }
 
     public void printTree() {
-
+        printSubTree(this.root);
     }
 
     /*
@@ -135,5 +135,48 @@ public abstract class BinarySearchTree {
             node = node.getRight();
         }
         return node;
+    }
+
+    private void printSubTree(Node node) {
+        if (node.getRight() != null) {
+            printTree(node.getRight(), true, "");
+        }
+
+        printNodeValue(node);
+
+        if(node.getLeft() != null) {
+            printTree(node.getLeft(), false, "");
+        }
+    }
+
+    private void printNodeValue(Node node) {
+        if (node.getValue() == null) {
+            System.out.println("<null>");
+        }
+        else System.out.println(node.getValue().toString());
+
+        System.out.println();
+    }
+
+    private void printTree(Node node, boolean isRight, String indent) {
+        if (node.getRight() != null) {
+            printTree(node.getRight(), true, indent + (isRight ? "\t\t" : " |\t  "));
+        }
+        System.out.println(indent);
+
+        if(isRight){
+            System.out.println(" /");
+        }
+        else{
+            System.out.println(" \\");
+        }
+        System.out.println("----- ");
+
+        printNodeValue(node);
+
+        if(node.getLeft() != null)
+        {
+            printTree(node.getLeft(), false, indent + (isRight ? "\t\t" : " |\t  "));
+        }
     }
 }
