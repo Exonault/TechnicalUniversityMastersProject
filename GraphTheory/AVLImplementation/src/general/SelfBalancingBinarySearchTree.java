@@ -3,22 +3,22 @@ package general;
 public abstract class SelfBalancingBinarySearchTree extends BinarySearchTree {
 
     protected Node rotateLeft(Node node) {
-        Node temp = node.getRight();
-        temp.setParent(node.getParent());
+        Node temp = node.right;
+        temp.parent = node.parent;
 
-        node.setRight(temp.getLeft());
-        if (node.getRight() != null) {
-            node.getRight().setParent(node);
+        node.right = temp.left;
+        if (node.right != null) {
+            node.right.parent = node;
         }
 
-        temp.setLeft(node);
-        node.setParent(temp);
+        temp.left = node;
+        node.parent = temp;
 
-        if (temp.getParent() != null) {
-            if (node == temp.getParent().getLeft()) {
-                temp.getParent().setLeft(temp);
+        if (temp.parent != null) {
+            if (node == temp.parent.left) {
+                temp.parent.left = temp;
             } else {
-                temp.getParent().setRight(temp);
+                temp.parent.right = temp;
             }
         } else {
             root = temp;
@@ -28,22 +28,22 @@ public abstract class SelfBalancingBinarySearchTree extends BinarySearchTree {
     }
 
     protected Node rotateRight(Node node) {
-        Node temp = node.getLeft();
-        temp.setParent(node.getParent());
-        node.setLeft(temp.getRight());
+        Node temp = node.left;
+        temp.parent = node.parent;
 
-        if (node.getLeft() != null) {
-            node.getLeft().setParent(node);
+        node.left = temp.right;
+        if (node.left != null) {
+            node.left.parent = node;
         }
 
-        temp.setRight(node);
-        node.setParent(temp);
+        temp.right = node;
+        node.parent = temp;
 
-        if (temp.getParent() != null) {
-            if (node == temp.getParent().getLeft()) {
-                temp.getParent().setLeft(temp);
+        if (temp.parent != null) {
+            if (node == temp.parent.left) {
+                temp.parent.left = temp;
             } else {
-                temp.getParent().setRight(temp);
+                temp.parent.right = temp;
             }
         } else {
             root = temp;
@@ -51,6 +51,4 @@ public abstract class SelfBalancingBinarySearchTree extends BinarySearchTree {
 
         return temp;
     }
-
-    public abstract Node delete(int element);
 }

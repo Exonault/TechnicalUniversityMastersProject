@@ -1,76 +1,51 @@
 package avl;
 
-import general.Node;
 import general.SelfBalancingBinarySearchTree;
 
 public class AVLTree extends SelfBalancingBinarySearchTree {
 
-    /*
-    public methods
-     */
     @Override
-    public Node insert(int value) {
-        Node newNode = super.insert(value);
+    public Node insert(int element) {
+        Node newNode = super.insert(element);
         rebalance((AVLNode) newNode);
         return newNode;
     }
 
     @Override
-    public Node delete(Integer element) {
-        Node deleteNode = super.delete(element);
+    public Node delete(int element) {
+        Node deleteNode = super.search(element);
         if (deleteNode != null) {
-            Node sucessorNode = super.delete(deleteNode);
-            if (sucessorNode != null) {
-                AVLNode minimum = sucessorNode.getRight() != null ? (AVLNode) getMinimum(sucessorNode.getRight()) : (AVLNode) sucessorNode;
+            Node successorNode = super.delete(deleteNode);
+            if (successorNode != null) {
+                // if replaced from getMinimum(deleteNode.right) then come back there and update heights
+                AVLNode minimum = successorNode.right != null ? (AVLNode) getMinimum(successorNode.right) : (AVLNode) successorNode;
                 recomputeHeight(minimum);
-                rebalance(minimum);
+                rebalance((AVLNode) minimum);
             } else {
-                AVLNode node = (AVLNode) deleteNode.getParent();
-                recomputeHeight(node);
-                rebalance(node);
+                recomputeHeight((AVLNode) deleteNode.parent);
+                rebalance((AVLNode) deleteNode.parent);
             }
-            return sucessorNode;
+            return successorNode;
         }
         return null;
     }
 
     @Override
-    public Node createNode(Integer value, Node parent, Node left, Node right) {
+    protected Node createNode(int value, Node parent, Node left, Node right) {
         return new AVLNode(value, parent, left, right);
-    }
-
-    /*
-    private methods
-     */
-    private void recomputeHeight(AVLNode node) {
-        while (node != null) {
-            node.setHeight(maxHeight((AVLNode) node.getLeft(), (AVLNode) node.getRight()) + 1);
-            node = (AVLNode) node.getParent();
-        }
-    }
-
-    private int maxHeight(AVLNode node1, AVLNode node2) {
-        if (node1 != null && node2 != null) {
-            return node1.getHeight() > node2.getHeight() ? node1.getHeight() : node2.getHeight();
-        } else if (node1 == null) {
-            return node2 != null ? node2.getHeight() : -1;
-        } else if (node2 == null) {
-            return node1 != null ? node1.getHeight() : -1;
-        }
-
-        return -1;
     }
 
     private void rebalance(AVLNode node) {
         while (node != null) {
-            Node parent = node.getParent();
-            int leftHeight = (node.getLeft() == null) ? -1 : ((AVLNode) node.getLeft()).getHeight();
-            int rightHeight = (node.getRight() == null) ? -1 : ((AVLNode) node.getRight()).getHeight();
-            int nodeBalance = rightHeight - leftHeight;
 
+            Node parent = node.parent;
+
+            int leftHeight = (node.left == null) ? -1 : ((AVLNode) node.left).height;
+            int rightHeight = (node.right == null) ? -1 : ((AVLNode) node.right).height;
+            int nodeBalance = rightHeight - leftHeight;
             // rebalance (-2 means left subtree outgrow, 2 means right subtree)
             if (nodeBalance == 2) {
-                if (node.getRight().getRight() != null) {
+                if (node.right.right != null) {
                     node = (AVLNode) avlRotateLeft(node);
                     break;
                 } else {
@@ -78,7 +53,7 @@ public class AVLTree extends SelfBalancingBinarySearchTree {
                     break;
                 }
             } else if (nodeBalance == -2) {
-                if (node.getLeft().getLeft() != null) {
+                if (node.left.left != null) {
                     node = (AVLNode) avlRotateRight(node);
                     break;
                 } else {
@@ -93,39 +68,67 @@ public class AVLTree extends SelfBalancingBinarySearchTree {
         }
     }
 
+
     private Node avlRotateLeft(Node node) {
         Node temp = super.rotateLeft(node);
 
-        updateHeight((AVLNode) temp.getLeft());
+        updateHeight((AVLNode) temp.left);
         updateHeight((AVLNode) temp);
-
         return temp;
     }
+
 
     private Node avlRotateRight(Node node) {
         Node temp = super.rotateRight(node);
 
-        updateHeight((AVLNode) temp.getRight());
+        updateHeight((AVLNode) temp.right);
         updateHeight((AVLNode) temp);
-
         return temp;
     }
 
-    private Node doubleRotateRightLeft(Node node) {
-        node.setRight(avlRotateRight(node.getRight()));
+
+    protected Node doubleRotateRightLeft(Node node) {
+        node.right = avlRotateRight(node.right);
         return avlRotateLeft(node);
     }
 
-    private Node doubleRotateLeftRight(Node node) {
-        node.setLeft(avlRotateLeft(node.getLeft()));
+
+    protected Node doubleRotateLeftRight(Node node) {
+        node.left = avlRotateLeft(node.left);
         return avlRotateRight(node);
     }
 
-    private void updateHeight(AVLNode node) {
-        int leftHeight = (node.getLeft() == null) ? -1 : ((AVLNode) node.getLeft()).getHeight();
-        int rightHeight = (node.getRight() == null) ? -1 : ((AVLNode) node.getRight()).getHeight();
 
-        node.setHeight(Math.max(leftHeight, rightHeight));
+    private void recomputeHeight(AVLNode node) {
+        while (node != null) {
+            node.height = maxHeight((AVLNode) node.left, (AVLNode) node.right) + 1;
+            node = (AVLNode) node.parent;
+        }
+    }
+
+    private int maxHeight(AVLNode node1, AVLNode node2) {
+        if (node1 != null && node2 != null) {
+            return node1.height > node2.height ? node1.height : node2.height;
+        } else if (node1 == null) {
+            return node2 != null ? node2.height : -1;
+        } else if (node2 == null) {
+            return node1 != null ? node1.height : -1;
+        }
+        return -1;
+    }
+
+    private static void updateHeight(AVLNode node) {
+        int leftHeight = (node.left == null) ? -1 : ((AVLNode) node.left).height;
+        int rightHeight = (node.right == null) ? -1 : ((AVLNode) node.right).height;
+        node.height = 1 + Math.max(leftHeight, rightHeight);
+    }
+
+    protected static class AVLNode extends Node {
+        public int height;
+
+        public AVLNode(int value, Node parent, Node left, Node right) {
+            super(value, parent, left, right);
+        }
     }
 
 }
