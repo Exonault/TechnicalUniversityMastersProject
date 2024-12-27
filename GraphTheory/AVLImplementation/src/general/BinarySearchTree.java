@@ -6,9 +6,8 @@ public abstract class BinarySearchTree {
     Fields
      */
 
-
     // Root node
-    public Node root;
+    protected Node root;
 
     // Tree size
     protected int size;
@@ -16,8 +15,7 @@ public abstract class BinarySearchTree {
     //Abstract methods
     protected abstract Node createNode(int value, Node parent, Node left, Node right);
 
-    //Public methods
-    public Node search(int element) {
+    protected Node search(int element) {
         Node node = root;
         while (node != null && node.value != null && node.value != element) {
             if (element < node.value) {
@@ -29,7 +27,7 @@ public abstract class BinarySearchTree {
         return node;
     }
 
-    public Node insert(int element) {
+    protected Node insert(int element) {
         if (root == null) {
             root = createNode(element, null, null, null);
             size++;
@@ -47,6 +45,10 @@ public abstract class BinarySearchTree {
             }
         }
 
+        if (insertParentNode == null) {
+            return null;
+        }
+
         Node newNode = createNode(element, insertParentNode, null, null);
         if (insertParentNode.value > newNode.value) {
             insertParentNode.left = newNode;
@@ -58,7 +60,7 @@ public abstract class BinarySearchTree {
         return newNode;
     }
 
-    public Node delete(int element) {
+    protected Node delete(int element) {
         Node deleteNode = search(element);
         if (deleteNode != null) {
             return delete(deleteNode);
@@ -71,11 +73,11 @@ public abstract class BinarySearchTree {
         return search(element) != null;
     }
 
-    public int getMinimum() {
+    protected int getMinimum() {
         return getMinimum(root).value;
     }
 
-    public int getMaximum() {
+    protected int getMaximum() {
         return getMaximum(root).value;
     }
 
@@ -87,30 +89,26 @@ public abstract class BinarySearchTree {
         printSubtree(root);
     }
 
-    //Private/Protected methods
     protected Node delete(Node deleteNode) {
         if (deleteNode != null) {
             Node nodeToReturn = null;
-            if (deleteNode != null) {
-                if (deleteNode.left == null) {
-                    nodeToReturn = transplant(deleteNode, deleteNode.right);
-                } else if (deleteNode.right == null) {
-                    nodeToReturn = transplant(deleteNode, deleteNode.left);
-                } else {
-                    Node successorNode = getMinimum(deleteNode.right);
-                    if (successorNode.parent != deleteNode) {
-                        transplant(successorNode, successorNode.right);
-                        successorNode.right = deleteNode.right;
-                        successorNode.right.parent = successorNode;
-                    }
-                    transplant(deleteNode, successorNode);
-                    successorNode.left = deleteNode.left;
-                    successorNode.left.parent = successorNode;
-                    nodeToReturn = successorNode;
+            if (deleteNode.left == null) {
+                nodeToReturn = transplant(deleteNode, deleteNode.right);
+            } else if (deleteNode.right == null) {
+                nodeToReturn = transplant(deleteNode, deleteNode.left);
+            } else {
+                Node successorNode = getMinimum(deleteNode.right);
+                if (successorNode.parent != deleteNode) {
+                    transplant(successorNode, successorNode.right);
+                    successorNode.right = deleteNode.right;
+                    successorNode.right.parent = successorNode;
                 }
-                size--;
+                transplant(deleteNode, successorNode);
+                successorNode.left = deleteNode.left;
+                successorNode.left.parent = successorNode;
+                nodeToReturn = successorNode;
             }
-
+            size--;
             return nodeToReturn;
         }
         return null;
@@ -159,7 +157,7 @@ public abstract class BinarySearchTree {
         if (node.value == null) {
             System.out.print("<null>");
         } else {
-            System.out.print(node.value.toString());
+            System.out.print(node.value);
         }
         System.out.println();
     }
@@ -181,48 +179,4 @@ public abstract class BinarySearchTree {
         }
     }
 
-    protected static class Node {
-        public Node(Integer value, Node parent, Node left, Node right) {
-            super();
-            this.value = value;
-            this.parent = parent;
-            this.left = left;
-            this.right = right;
-        }
-
-        public Integer value;
-        public Node parent;
-        public Node left;
-        public Node right;
-
-        public boolean isLeaf() {
-            return left == null && right == null;
-        }
-
-        @Override
-        public int hashCode() {
-            final int prime = 31;
-            int result = 1;
-            result = prime * result + ((value == null) ? 0 : value.hashCode());
-            return result;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj)
-                return true;
-            if (obj == null)
-                return false;
-            if (getClass() != obj.getClass())
-                return false;
-            Node other = (Node) obj;
-            if (value == null) {
-                if (other.value != null)
-                    return false;
-            } else if (!value.equals(other.value))
-                return false;
-            return true;
-        }
-
-    }
 }
