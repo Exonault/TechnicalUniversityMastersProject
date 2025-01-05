@@ -1,18 +1,12 @@
 package general;
+//enable code vision
 
 public abstract class BinarySearchTree {
 
-    /*
-    Fields
-     */
-
-    // Root node
     protected Node root;
 
-    // Tree size
     protected int size;
 
-    //Abstract methods
     protected abstract Node createNode(int value, Node parent, Node left, Node right);
 
     protected Node search(int element) {
@@ -77,7 +71,7 @@ public abstract class BinarySearchTree {
         return size;
     }
 
-    public void printTree() {
+    public void print() {
         printSubtree(root);
     }
 

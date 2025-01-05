@@ -15,10 +15,6 @@ public class Node {
         this.right = right;
     }
 
-    public boolean isLeaf() {
-        return left == null && right == null;
-    }
-
     @Override
     public int hashCode() {
         final int prime = 31;

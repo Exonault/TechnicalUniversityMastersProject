@@ -11,10 +11,9 @@ public class Main {
             if (!tree.contains(i1)) {
                 tree.insert(i1);
                 System.out.println("Inserted: " + i1);
-                tree.printTree();
+                tree.print();
                 System.out.println();
             }
         }
-
     }
 }

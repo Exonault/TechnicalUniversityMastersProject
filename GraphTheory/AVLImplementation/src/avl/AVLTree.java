@@ -52,7 +52,8 @@ public class AVLTree extends BinarySearchTree {
                     node = (AVLNode) doubleRotateRightLeft(node);
                     break;
                 }
-            } else if (nodeBalance == -2) { // -2 means left subtree overgrow
+            }
+            else if (nodeBalance == -2) { // -2 means left subtree overgrow
                 assert node.left != null;
                 if (node.left.left != null) {
                     node = (AVLNode) avlRotateRight(node);
