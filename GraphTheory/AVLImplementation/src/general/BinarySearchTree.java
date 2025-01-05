@@ -73,14 +73,6 @@ public abstract class BinarySearchTree {
         return search(element) != null;
     }
 
-    protected int getMinimum() {
-        return getMinimum(root).value;
-    }
-
-    protected int getMaximum() {
-        return getMaximum(root).value;
-    }
-
     public int getSize() {
         return size;
     }
@@ -114,6 +106,13 @@ public abstract class BinarySearchTree {
         return null;
     }
 
+    protected Node getMinimum(Node node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+
     private Node transplant(Node nodeToReplace, Node newNode) {
         if (nodeToReplace.parent == null) {
             this.root = newNode;
@@ -126,20 +125,6 @@ public abstract class BinarySearchTree {
             newNode.parent = nodeToReplace.parent;
         }
         return newNode;
-    }
-
-    protected Node getMinimum(Node node) {
-        while (node.left != null) {
-            node = node.left;
-        }
-        return node;
-    }
-
-    protected Node getMaximum(Node node) {
-        while (node.right != null) {
-            node = node.right;
-        }
-        return node;
     }
 
     //Tree printing
